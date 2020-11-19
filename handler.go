@@ -8,7 +8,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/apollotracing"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/kiwisheets/util"
@@ -35,10 +34,7 @@ func GraphqlHandler(gqlHandler *handler.Server, db *gorm.DB, cfg *util.GqlConfig
 		Cache: cache,
 	})
 
-	if cfg.Environment == "development" {
-		gqlHandler.Use(extension.Introspection{})
-		gqlHandler.Use(apollotracing.Tracer{})
-	}
+	gqlHandler.Use(extension.Introspection{})
 	gqlHandler.Use(&extension.ComplexityLimit{
 		Func: func(ctx context.Context, rc *graphql.OperationContext) int {
 			return cfg.ComplexityLimit
