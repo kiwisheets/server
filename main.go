@@ -10,9 +10,13 @@ import (
 )
 
 var router *gin.Engine
+var port string
+var endpoint string
 
 func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.RouterGroup {
 	router = gin.Default()
+	port = cfg.Port
+	endpoint = cfg.APIPath
 
 	registerMiddleware(&router.RouterGroup, db, cfg)
 
@@ -22,7 +26,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 }
 
 // Run starts a new server
-func Run(cfg *util.GqlConfig, db *gorm.DB) {
-	log.Println("Server listening @ \"/\" on " + cfg.Port)
-	router.Run()
+func Run() {
+	log.Println("Server listening @ \"/" + endpoint + "\" on " + port)
+	router.Run(":" + port)
 }
