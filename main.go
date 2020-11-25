@@ -27,6 +27,6 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 
 // Run starts a new server
 func Run() {
-	log.Println("Server listening @ \"/" + endpoint + "\" on " + port)
+	log.Println("Server listening @ \"" + endpoint + "\" on " + port)
 	router.Run(":" + port)
 }
