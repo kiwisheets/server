@@ -27,6 +27,10 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 
 // Run starts a new server
 func Run() {
+	SetHealthStatus(HealthStarting)
+
 	log.Println("Server listening @ \"" + endpoint + "\" on " + port)
 	router.Run(":" + port)
+
+	SetHealthStatus(HealthHealthy)
 }
