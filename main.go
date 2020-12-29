@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/kiwisheets/util"
 	"gorm.io/gorm"
@@ -19,6 +20,16 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 	endpoint = cfg.APIPath
 
 	registerMiddleware(&router.RouterGroup, db, cfg)
+
+	// register cors middleware for Apollo Studio if in Dev
+	if cfg.Environment == "development" {
+		config := cors.DefaultConfig()
+		config.AllowOrigins = []string{
+			"https://studio.apollographql.com",
+		}
+		config.AllowCredentials = true
+		router.Use(cors.New(config))
+	}
 
 	registerRoutes(gqlHandler, &router.RouterGroup, cfg, db)
 
