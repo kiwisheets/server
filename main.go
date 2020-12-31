@@ -28,6 +28,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 			"https://studio.apollographql.com",
 		}
 		config.AllowCredentials = true
+		config.AllowHeaders = append(config.AllowHeaders, "user")
 		router.Use(cors.New(config))
 	}
 
