@@ -7,7 +7,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/emvi/hide"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/kiwisheets/server"
 	"github.com/kiwisheets/util"
@@ -42,7 +41,7 @@ func (a *App) Handler(es graphql.ExecutableSchema) *handler.Server {
 	return a.gqlHandler
 }
 
-func (a *App) SetupServer(es graphql.ExecutableSchema, cfg *util.GqlConfig, db *gorm.DB) *gin.RouterGroup {
+func (a *App) SetupServer(es graphql.ExecutableSchema, cfg *util.GqlConfig, db *gorm.DB) *server.Server {
 	return server.Setup(a.Handler(es), cfg, db)
 }
 

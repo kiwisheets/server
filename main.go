@@ -9,19 +9,25 @@ import (
 	"gorm.io/gorm"
 )
 
-var router *gin.Engine
-var port string
-var endpoint string
+type Server struct {
+	RouterGroup *gin.RouterGroup
+	router      *gin.Engine
+	port        string
+	endpoint    string
+}
 
-func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.RouterGroup {
+func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server {
 	// disable unnecessary debug logging from gin
 	gin.SetMode(gin.ReleaseMode)
 
-	router = gin.Default()
-	port = cfg.Port
-	endpoint = cfg.APIPath
+	var s Server
 
-	registerMiddleware(&router.RouterGroup, db, cfg)
+	s.router = gin.Default()
+	s.RouterGroup = &s.router.RouterGroup
+	s.port = cfg.Port
+	s.endpoint = cfg.APIPath
+
+	registerMiddleware(s.RouterGroup, db, cfg)
 
 	// register cors middleware for Apollo Studio if in Dev
 	if cfg.Environment == "development" {
@@ -31,20 +37,20 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 		}
 		config.AllowCredentials = true
 		config.AllowHeaders = append(config.AllowHeaders, "user")
-		router.Use(cors.New(config))
+		s.router.Use(cors.New(config))
 	}
 
-	registerRoutes(gqlHandler, &router.RouterGroup, cfg, db)
+	registerRoutes(gqlHandler, s.RouterGroup, cfg, db)
 
-	return &router.RouterGroup
+	return &s
 }
 
 // Run starts a new server
-func Run(log *logrus.Entry) {
+func (s *Server) Run(log *logrus.Entry) {
 	SetHealthStatus(HealthStarting)
 
-	log.Println("Server listening @ \"" + endpoint + "\" on " + port)
-	router.Run(":" + port)
+	log.Println("Server listening @ \"" + s.endpoint + "\" on " + s.port)
+	s.router.Run(":" + s.port)
 
 	SetHealthStatus(HealthHealthy)
 }
