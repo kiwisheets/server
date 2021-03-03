@@ -1,12 +1,11 @@
 package server
 
 import (
-	"log"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/kiwisheets/util"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -41,7 +40,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.Ro
 }
 
 // Run starts a new server
-func Run() {
+func Run(log *logrus.Entry) {
 	SetHealthStatus(HealthStarting)
 
 	log.Println("Server listening @ \"" + endpoint + "\" on " + port)
