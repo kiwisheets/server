@@ -35,8 +35,8 @@ func (a *App) Shutdown() {
 
 func (a *App) Handler(es graphql.ExecutableSchema) *handler.Server {
 	if a.gqlHandler == nil {
-		gqlHandler := handler.New(es)
-		a.injectExtensions(gqlHandler)
+		a.gqlHandler = handler.New(es)
+		a.injectExtensions(a.gqlHandler)
 	}
 	return a.gqlHandler
 }
