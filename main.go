@@ -15,6 +15,9 @@ var port string
 var endpoint string
 
 func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *gin.RouterGroup {
+	// disable unnecessary debug logging from gin
+	gin.SetMode(gin.ReleaseMode)
+
 	router = gin.Default()
 	port = cfg.Port
 	endpoint = cfg.APIPath
