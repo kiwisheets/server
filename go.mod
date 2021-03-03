@@ -14,7 +14,7 @@ require (
 	github.com/containerd/cgroups v0.0.0-20210114181951-8a68de567b68 // indirect
 	github.com/dgryski/trifles v0.0.0-20210119233746-37d926d5de6c // indirect
 	github.com/docker/docker v20.10.5+incompatible // indirect
-	github.com/emvi/hide v1.1.2 // indirect
+	github.com/emvi/hide v1.1.2
 	github.com/fsouza/go-dockerclient v1.7.1 // indirect
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
@@ -23,21 +23,27 @@ require (
 	github.com/golang/mock v1.5.0 // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/joho/godotenv v1.3.0
 	github.com/kiwisheets/auth v0.0.9
 	github.com/kiwisheets/util v0.0.11
 	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magefile/mage v1.11.0 // indirect
 	github.com/mattn/goveralls v0.0.8 // indirect
-	github.com/maxtroughear/goenv v0.0.4 // indirect
+	github.com/maxtroughear/goenv v0.0.4
+	github.com/maxtroughear/logrusextension v0.0.1
+	github.com/maxtroughear/logrusnrhook v0.0.2
+	github.com/maxtroughear/nrextension v0.0.1
 	github.com/mitchellh/copystructure v1.1.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/newrelic/go-agent/v3 v3.10.0
+	github.com/newrelic/go-agent/v3/integrations/logcontext/nrlogrusplugin v1.0.0
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/onsi/ginkgo v1.15.0 // indirect
 	github.com/onsi/gomega v1.10.5 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/sirupsen/logrus v1.8.0 // indirect
+	github.com/sirupsen/logrus v1.8.0
 	github.com/streadway/amqp v1.0.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tiago4orion/conjure v0.0.0-20150908101743-93cb30b9d218 // indirect
