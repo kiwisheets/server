@@ -10,10 +10,9 @@ import (
 )
 
 type Server struct {
-	RouterGroup *gin.RouterGroup
-	router      *gin.Engine
-	port        string
-	endpoint    string
+	router   *gin.Engine
+	port     string
+	endpoint string
 }
 
 func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server {
@@ -23,11 +22,10 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server
 	var s Server
 
 	s.router = gin.Default()
-	s.RouterGroup = &s.router.RouterGroup
 	s.port = cfg.Port
 	s.endpoint = cfg.APIPath
 
-	registerMiddleware(s.RouterGroup, db, cfg)
+	registerMiddleware(&s.router.RouterGroup, db, cfg)
 
 	// register cors middleware for Apollo Studio if in Dev
 	if cfg.Environment == "development" {
@@ -40,9 +38,13 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server
 		s.router.Use(cors.New(config))
 	}
 
-	registerRoutes(gqlHandler, s.RouterGroup, cfg, db)
+	registerRoutes(gqlHandler, &s.router.RouterGroup, cfg, db)
 
 	return &s
+}
+
+func (s *Server) RegisterMiddleware(middleware ...gin.HandlerFunc) {
+	s.router.RouterGroup.Use(middleware...)
 }
 
 // Run starts a new server
