@@ -10,9 +10,10 @@ import (
 )
 
 type Server struct {
-	router   *gin.Engine
-	port     string
-	endpoint string
+	router     *gin.Engine
+	config     *util.GqlConfig
+	db         *gorm.DB
+	gqlHandler *handler.Server
 }
 
 func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server {
@@ -20,12 +21,10 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server
 	gin.SetMode(gin.ReleaseMode)
 
 	var s Server
-
 	s.router = gin.Default()
-	s.port = cfg.Port
-	s.endpoint = cfg.APIPath
-
-	registerMiddleware(&s.router.RouterGroup, db, cfg)
+	s.config = cfg
+	s.db = db
+	s.gqlHandler = gqlHandler
 
 	// register cors middleware for Apollo Studio if in Dev
 	if cfg.Environment == "development" {
@@ -38,7 +37,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server
 		s.router.Use(cors.New(config))
 	}
 
-	registerRoutes(gqlHandler, &s.router.RouterGroup, cfg, db)
+	registerMiddleware(&s.router.RouterGroup, db, cfg)
 
 	return &s
 }
@@ -49,10 +48,12 @@ func (s *Server) RegisterMiddleware(middleware ...gin.HandlerFunc) {
 
 // Run starts a new server
 func (s *Server) Run(log *logrus.Entry) {
+	registerRoutes(s.gqlHandler, &s.router.RouterGroup, s.config, s.db)
+
 	SetHealthStatus(HealthStarting)
 
-	log.Println("Server listening @ \"" + s.endpoint + "\" on " + s.port)
-	s.router.Run(":" + s.port)
+	log.Println("Server listening @ \"" + s.config.APIPath + "\" on " + s.config.Port)
+	s.router.Run(":" + s.config.Port)
 
 	SetHealthStatus(HealthHealthy)
 }
