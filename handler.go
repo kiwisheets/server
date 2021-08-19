@@ -17,7 +17,7 @@ import (
 // GraphqlHandler constructs and returns a http handler
 func GraphqlHandler(gqlHandler *handler.Server, db *gorm.DB, cfg *util.GqlConfig) http.Handler {
 	// init APQ cache
-	cache, err := newCache(cfg.Redis.Address, 24*time.Hour)
+	cache, err := newCache(cfg.Redis.Address, cfg.Redis.Prefix, 24*time.Hour)
 	if err != nil {
 		panic(fmt.Errorf("cannot create APQ cache: %v", err))
 	}
