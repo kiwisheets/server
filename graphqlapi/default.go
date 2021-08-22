@@ -84,7 +84,7 @@ func getEnv() env {
 		environment: goenv.MustGet("ENVIRONMENT"),
 		hashCfg: util.HashConfig{
 			Salt:      goenv.MustGetSecretFromEnv("HASH_SALT"),
-			MinLength: goenv.CanGetInt32("HASH_MIN_LENGTH", 10),
+			MinLength: goenv.CanGetInt("HASH_MIN_LENGTH", 10),
 		},
 	}
 }
