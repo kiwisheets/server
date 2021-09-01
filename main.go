@@ -6,24 +6,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kiwisheets/util"
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 )
 
 type Server struct {
 	router     *gin.Engine
 	config     *util.GqlConfig
-	db         *gorm.DB
 	gqlHandler *handler.Server
 }
 
-func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server {
+func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig) *Server {
 	// disable unnecessary debug logging from gin
 	gin.SetMode(gin.ReleaseMode)
 
 	var s Server
 	s.router = gin.Default()
 	s.config = cfg
-	s.db = db
 	s.gqlHandler = gqlHandler
 
 	// register cors middleware for Apollo Studio if in Dev
@@ -37,7 +34,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig, db *gorm.DB) *Server
 		s.router.Use(cors.New(config))
 	}
 
-	registerMiddleware(&s.router.RouterGroup, db, cfg)
+	registerMiddleware(&s.router.RouterGroup)
 
 	return &s
 }
@@ -48,7 +45,7 @@ func (s *Server) RegisterMiddleware(middleware ...gin.HandlerFunc) {
 
 // Run starts a new server
 func (s *Server) Run(log *logrus.Entry) {
-	registerRoutes(s.gqlHandler, &s.router.RouterGroup, s.config, s.db)
+	registerRoutes(s.gqlHandler, &s.router.RouterGroup, s.config)
 
 	SetHealthStatus(HealthStarting)
 

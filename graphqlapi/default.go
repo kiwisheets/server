@@ -11,9 +11,7 @@ import (
 	"github.com/kiwisheets/util"
 	"github.com/maxtroughear/goenv"
 	"github.com/maxtroughear/logrusextension"
-	"github.com/newrelic/go-agent/v3/integrations/logcontext/nrlogrusplugin"
 	"github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 )
 
 type App struct {
@@ -32,8 +30,8 @@ func (a *App) Handler(es graphql.ExecutableSchema) *handler.Server {
 	return a.gqlHandler
 }
 
-func (a *App) SetupServer(es graphql.ExecutableSchema, cfg *util.GqlConfig, db *gorm.DB) *server.Server {
-	return server.Setup(a.Handler(es), cfg, db)
+func (a *App) SetupServer(es graphql.ExecutableSchema, cfg *util.GqlConfig) *server.Server {
+	return server.Setup(a.Handler(es), cfg)
 }
 
 func (a *App) injectExtensions(gqlHandler *handler.Server) {
@@ -45,6 +43,7 @@ func (a *App) injectExtensions(gqlHandler *handler.Server) {
 type env struct {
 	appName     string
 	environment string
+	logLevel    string
 	hashCfg     util.HashConfig
 }
 
@@ -54,7 +53,13 @@ func NewDefault() App {
 	hide.UseHash(hide.NewHashID(env.hashCfg.Salt, env.hashCfg.MinLength))
 
 	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.DebugLevel)
+	logLevel, err := logrus.ParseLevel(env.logLevel)
+	if err != nil {
+		logLevel = logrus.InfoLevel
+		logrus.Errorf("Failed to parse LOG_LEVEL environment variable: %v", err)
+	}
+	logrus.SetLevel(logLevel)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
 
 	hostname, _ := os.Hostname()
 
@@ -67,13 +72,6 @@ func NewDefault() App {
 		}),
 	}
 
-	// gin.SetMode(gin.ReleaseMode)
-
-	if env.environment == "production" {
-		logrus.SetLevel(logrus.InfoLevel)
-		logrus.SetFormatter(nrlogrusplugin.ContextFormatter{})
-	}
-
 	return app
 }
 
@@ -82,6 +80,7 @@ func getEnv() env {
 	return env{
 		appName:     goenv.CanGet("APP_NAME", "unnamed"),
 		environment: goenv.MustGet("ENVIRONMENT"),
+		logLevel:    goenv.CanGet("LOG_LEVEL", "info"),
 		hashCfg: util.HashConfig{
 			Salt:      goenv.MustGetSecretFromEnv("HASH_SALT"),
 			MinLength: goenv.CanGetInt("HASH_MIN_LENGTH", 10),

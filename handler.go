@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -11,17 +10,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/kiwisheets/util"
-	"gorm.io/gorm"
 )
 
 // GraphqlHandler constructs and returns a http handler
-func GraphqlHandler(gqlHandler *handler.Server, db *gorm.DB, cfg *util.GqlConfig) http.Handler {
-	// init APQ cache
-	cache, err := newCache(cfg.Redis.Address, cfg.Redis.Prefix, 24*time.Hour)
-	if err != nil {
-		panic(fmt.Errorf("cannot create APQ cache: %v", err))
-	}
-
+func GraphqlHandler(gqlHandler *handler.Server, cfg *util.GqlConfig) http.Handler {
 	gqlHandler.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,
 	})
@@ -31,7 +23,7 @@ func GraphqlHandler(gqlHandler *handler.Server, db *gorm.DB, cfg *util.GqlConfig
 	gqlHandler.AddTransport(transport.MultipartForm{})
 
 	gqlHandler.Use(extension.AutomaticPersistedQuery{
-		Cache: cache,
+		Cache: *cfg.Cache,
 	})
 
 	gqlHandler.Use(extension.Introspection{})

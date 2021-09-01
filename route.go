@@ -7,11 +7,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"github.com/kiwisheets/util"
-	"gorm.io/gorm"
 )
 
-func graphqlHandler(gqlHandler *handler.Server, db *gorm.DB, cfg *util.GqlConfig) gin.HandlerFunc {
-	gql := GraphqlHandler(gqlHandler, db, cfg)
+func graphqlHandler(gqlHandler *handler.Server, cfg *util.GqlConfig) gin.HandlerFunc {
+	gql := GraphqlHandler(gqlHandler, cfg)
 	return func(c *gin.Context) {
 		gql.ServeHTTP(c.Writer, c.Request)
 	}
@@ -30,12 +29,12 @@ func playgroundHandler(cfg *util.GqlConfig) gin.HandlerFunc {
 	}
 }
 
-func registerRoutes(gqlHandler *handler.Server, router *gin.RouterGroup, cfg *util.GqlConfig, db *gorm.DB) {
+func registerRoutes(gqlHandler *handler.Server, router *gin.RouterGroup, cfg *util.GqlConfig) {
 	router.GET("/health", healthHandler())
 
 	// support GET for automatic persisted queries
-	router.GET(cfg.APIPath, graphqlHandler(gqlHandler, db, cfg))
-	router.POST(cfg.APIPath, graphqlHandler(gqlHandler, db, cfg))
+	router.GET(cfg.APIPath, graphqlHandler(gqlHandler, cfg))
+	router.POST(cfg.APIPath, graphqlHandler(gqlHandler, cfg))
 
 	if cfg.PlaygroundEnabled {
 		router.GET(cfg.PlaygroundPath, playgroundHandler(cfg))
