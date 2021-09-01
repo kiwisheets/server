@@ -23,7 +23,7 @@ func GraphqlHandler(gqlHandler *handler.Server, cfg *util.GqlConfig) http.Handle
 	gqlHandler.AddTransport(transport.MultipartForm{})
 
 	gqlHandler.Use(extension.AutomaticPersistedQuery{
-		Cache: *cfg.Cache,
+		Cache: cfg.Cache,
 	})
 
 	gqlHandler.Use(extension.Introspection{})

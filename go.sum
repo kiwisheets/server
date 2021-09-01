@@ -515,8 +515,8 @@ github.com/kiwisheets/auth v0.0.9/go.mod h1:+syp6YG6rhG/z3JtoIcR1XEcKK5unh47YUTk
 github.com/kiwisheets/orm v0.0.1 h1:/KM/LE5tqQrTEGsrS8decgJFwu47ALuHrRhdRmVRHHc=
 github.com/kiwisheets/orm v0.0.1/go.mod h1:/yewjUCn2pejMer2chMo6QT71eqy9UJuLzRnre7XkBI=
 github.com/kiwisheets/util v0.0.2/go.mod h1:wi4lPSimv7rZFjb/BA6FLWZvJQI5QRQaYCkdyQUoZSQ=
-github.com/kiwisheets/util v0.1.1 h1:PPxCK5lG1dBdjoTN4YBOf4UAHEEF93iGedl0uTSJpwE=
-github.com/kiwisheets/util v0.1.1/go.mod h1:eLlVxzcpiauc1LaRhyT/N1ptjvno03DSt4xN5F8x3+0=
+github.com/kiwisheets/util v0.1.2 h1:X3uLLFilcY6S9uPFNsnjgcplb7OgQR1knOUwjkhjxnM=
+github.com/kiwisheets/util v0.1.2/go.mod h1:eLlVxzcpiauc1LaRhyT/N1ptjvno03DSt4xN5F8x3+0=
 github.com/klauspost/compress v1.11.3/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
 github.com/klauspost/compress v1.11.13/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/joho/godotenv v1.3.0
 	github.com/kiwisheets/auth v0.0.9
-	github.com/kiwisheets/util v0.1.1
+	github.com/kiwisheets/util v0.1.2
 	github.com/maxtroughear/goenv v0.1.1
 	github.com/maxtroughear/logrusextension v0.0.1
 	github.com/sirupsen/logrus v1.8.1
