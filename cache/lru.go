@@ -11,7 +11,7 @@ type LRU struct {
 	lru *lru.Cache
 }
 
-func New(size int) *LRU {
+func NewLRU(size int) *LRU {
 	cache, err := lru.New(size)
 	if err != nil {
 		// An error is only returned for non-positive cache size

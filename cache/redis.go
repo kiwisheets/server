@@ -16,7 +16,7 @@ type RedisCache struct {
 
 const apqPrefix = "apq:"
 
-func NewCache(redisAddress string, appPrefix string, ttl time.Duration) *RedisCache {
+func NewRedis(redisAddress string, appPrefix string, ttl time.Duration) *RedisCache {
 	client := redis.NewClient(&redis.Options{
 		Addr: redisAddress,
 	})
