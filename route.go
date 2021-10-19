@@ -35,6 +35,7 @@ func registerRoutes(gqlHandler *handler.Server, router *gin.RouterGroup, cfg *ut
 	// support GET for automatic persisted queries
 	router.GET(cfg.APIPath, graphqlHandler(gqlHandler, cfg))
 	router.POST(cfg.APIPath, graphqlHandler(gqlHandler, cfg))
+	router.OPTIONS(cfg.APIPath, graphqlHandler(gqlHandler, cfg))
 
 	if cfg.PlaygroundEnabled {
 		router.GET(cfg.PlaygroundPath, playgroundHandler(cfg))
