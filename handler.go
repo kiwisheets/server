@@ -17,7 +17,7 @@ import (
 func GraphqlHandler(gqlHandler *handler.Server, cfg *util.GqlConfig) http.Handler {
 	var webSocketUpgradeCheckOrigin func(r *http.Request) bool
 
-	if cfg.Environment == "development" {
+	if checkIfDev(cfg.Environment) {
 		webSocketUpgradeCheckOrigin = func(r *http.Request) bool { return true }
 	} else {
 		webSocketUpgradeCheckOrigin = nil

@@ -24,7 +24,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig) *Server {
 	s.gqlHandler = gqlHandler
 
 	// register cors middleware for Apollo Studio if in Dev
-	if cfg.Environment == "development" {
+	if checkIfDev(cfg.Environment) {
 		config := cors.DefaultConfig()
 		config.AllowOrigins = []string{
 			"https://studio.apollographql.com",
