@@ -28,6 +28,7 @@ func Setup(gqlHandler *handler.Server, cfg *util.GqlConfig) *Server {
 		config := cors.DefaultConfig()
 		config.AllowOrigins = []string{
 			"https://studio.apollographql.com",
+			"http://localhost:3000",
 		}
 		config.AllowCredentials = true
 		config.AllowHeaders = append(config.AllowHeaders, "user")
