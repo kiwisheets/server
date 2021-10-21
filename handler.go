@@ -9,13 +9,25 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/gorilla/websocket"
 	"github.com/kiwisheets/util"
 )
 
 // GraphqlHandler constructs and returns a http handler
 func GraphqlHandler(gqlHandler *handler.Server, cfg *util.GqlConfig) http.Handler {
+	var webSocketUpgradeCheckOrigin func(r *http.Request) bool
+
+	if cfg.Environment == "development" {
+		webSocketUpgradeCheckOrigin = func(r *http.Request) bool { return true }
+	} else {
+		webSocketUpgradeCheckOrigin = nil
+	}
+
 	gqlHandler.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: webSocketUpgradeCheckOrigin,
+		},
 	})
 	gqlHandler.AddTransport(transport.Options{})
 	gqlHandler.AddTransport(transport.GET{})
